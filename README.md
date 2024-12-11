@@ -1,144 +1,98 @@
+<p align="center"><img src="https://github.com/nx-go.png" alt="nx-go logo" height="230"/></p>
+
 <div align="center">
-  <h1>nx-go</h1>
-  <p>Nx plugin to use <a href="https://go.dev">Go</a> in a <a href="https://nx.dev">Nx</a> workspace.</p>
-  <img src="https://github.com/nx-go.png" title="nx-go" alt="nx-go logo">
-  <h2>Using nx-go in your company? Consider <a href="https://github.com/sponsors/beeman">sponsoring me</a> and get priority support in the issues.</h2>
+
+# Go Nx plugin
+
+**First-class support of [Go](https://go.dev) in a [Nx](https://nx.dev) workspace**
+
+[![GitHub release](https://img.shields.io/github/v/release/nx-go/nx-go)](https://github.com/nx-go/nx-go/releases/latest)
+[![Nx version](https://img.shields.io/npm/dependency-version/%40nx-go%2Fnx-go/%40nx%2Fdevkit?label=Nx&logo=nx)](https://nx.dev)
+[![npm Downloads](https://img.shields.io/npm/dt/@nx-go/nx-go?color=eb2f06&logo=npm)](https://npmjs.com/package/@nx-go/nx-go)
+[![LICENSE](https://img.shields.io/github/license/nx-go/nx-go)](https://github.com/nx-go/nx-go/blob/main/LICENSE)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nx-go_nx-go&metric=alert_status)](https://sonarcloud.io/dashboard?id=nx-go_nx-go)
+
 </div>
 
-## Getting started
+## ✨ Features
 
-First, make sure you have a Nx Workspace.
+- Generate Go applications and libraries **in seconds** within your Nx workspace
+- Execute, build, format and test projects with a customizable configuration
+- Efficient caching and dependency graph tools for Go projects
+- Use official Go commands in the background
 
-Create a new one using the following command:
+## 🚀 Getting started
 
-```bash
-yarn create nx-workspace go-playground --preset=empty --cli=nx --nx-cloud true
-cd go-playground
+You need to have a [stable version of Go](https://go.dev/dl/) installed on your machine. And.. you are ready!
+
+### Generate a Nx workspace with Go support
+
+```shell
+npx create-nx-workspace go-workspace --preset=@nx-go/nx-go
 ```
 
-Next, install the nx-go plugin:
+### Add to an exisiting workspace
 
-```bash
-yarn add -D @nx-go/nx-go
+```shell
+nx add @nx-go/nx-go
 ```
 
-Create a new application:
+### Migrate to latest version
 
-```bash
-nx g @nx-go/nx-go:app api
+```shell
+nx migrate @nx-go/nx-go
 ```
 
-## Usage
+### Don't want to use a multi-module Go workspace?
 
-You can now run the Nx workspace commands:
+The plugin configures a [multi-module Go workspace](https://go.dev/doc/tutorial/workspaces) by default, to simplify project management and improve the quality of the Nx graph. If you don't want to take advantage of this feature, you can use generator `convert-to-one-mod` after the plugin installation. Generators will automatically adapt to your configuration.
 
-### Building the application
-
-This command builds the application using the `go build` command, and stores the output in the `dist/<app-name>/` directory.
-
-```bash
-nx build api
+```shell
+nx g @nx-go/nx-go:convert-to-one-mod
 ```
 
-### Linting the application
+## 📖 Generators & executors
 
-Lint the application using the `go fmt` command.
+### Generators
 
-```bash
-nx lint api
-```
+- `application`: [Generate a Go application](./docs/generators/application.md)
+- `library`: [Generate a Go library](./docs/generators/library.md)
 
-### Serving the application
+### Executors
 
-Serves the application using the `go run` command.
+- `build`: [Build a Go project](./docs/executors/build.md)
+- `generate`: [Generate code using Go](./docs/executors/generate.md)
+- `lint`: [Format and lint a Go project](./docs/executors/lint.md)
+- `serve`: [Run a Go application](./docs/executors/serve.md)
+- `test`: [Run tests of a Go project](./docs/executors/test.md)
+- `tidy`: [Ensures go.mod file matches a project source code](./docs/executors/tidy.md)
 
-```bash
-nx serve api
-```
+> [!TIP]
+> You can use `nx list @nx-go/nx-go` to see list capabilities.
 
-#### Watch mode
+Want to try out these capabilities quickly? Visit our [playground](https://github.com/nx-go/nx-go-playground)!
 
-To run the application in watch mode you can use `gow`, after [installing](https://github.com/mitranim/gow#installation) it on your machine.
+Need more customization? A [plugin configuration](./docs/options.md) is also available.
 
-Find the key `projects.<app-name>.architect.serve.options` and set the `cmd` parameter to `gow`, like so:
+## 🧩 Compatibility
 
-```json
-{
-  "projects": {
-    "api": {
-      "architect": {
-        "serve": {
-          "builder": "@nx-go/nx-go:serve",
-          "options": {
-            "cmd": "gow",
-            "cwd": ".", // Set working dir to project root so it picks up changes in `libs/*`
-            "main": "apps/api/main.go"
-          }
-        }
-      }
-    }
-  }
-}
-```
+| nx-go version | Nx version   |
+| ------------- | ------------ |
+| 3.x           | 17.x to 20.x |
+| 2.x           | 13.x to 16.x |
+| 1.x           | < 13.x       |
 
-### Testing the application
+This plugin is only tested on [stable versions of Go](https://go.dev/dl/), older versions does not receive support. However, you can expect a fair degree of compatibility. Please note that multi-module Go workspaces require Go 1.18 or later.
 
-Test the application using the `go test` command.
+## Contributors
 
-```bash
-nx test api
-```
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top"><a href="https://github.com/beeman"><img src="https://github.com/beeman.png" width="100" alt="Utarwyn"/><br /><b>Bram Borggreve</b></a><br />Creator</td>
+      <td align="center" valign="top"><a href="https://github.com/utarwyn"><img src="https://github.com/utarwyn.png" width="100" alt="Utarwyn"/><br /><b>Maxime Malgorn</b></a><br />Maintainer</td>
+    </tr>
+  </tbody>
+</table>
 
-## Docker
-
-In order to build Docker containers from the Go api inside the Nx Workspace, there are 2 base images provided:
-
-- [nxgo/base](https://hub.docker.com/r/nxgo/base)
-  - Node 14 on Alpine, with Go 1.13
-- [nxgo/cli](https://hub.docker.com/r/nxgo/cli)
-  - Node 14 on Alpine, with Go 1.13
-  - [@angular/cli](https://github.com/angular/angular-cli) v10
-  - [@nrwl/cli](https://github.com/nrwl/nx) v10
-  - [nxpm](https://github.com/nxpm/nxpm-cli) v1
-
-### Using the base images:
-
-```dockerfile
-# Use nxgo/cli as the base image to do the build
-FROM nxgo/cli as builder
-
-# Create app directory
-WORKDIR /workspace
-
-# Copy package.json and the lock file
-COPY package.json yarn.lock /workspace/
-
-# Install app dependencies
-RUN yarn
-
-# Copy source files
-COPY . .
-
-# Build apps
-RUN yarn build api
-
-# This is the stage where the final production image is built
-FROM golang:1.14-alpine as final
-
-# Copy over artifacts from builder image
-COPY --from=builder /workspace/dist/apps/api /workspace/api
-
-# Set environment variables
-ENV PORT=3000
-ENV HOST=0.0.0.0
-
-# Expose default port
-EXPOSE 3000
-
-# Start server
-CMD [ "/workspace/api" ]
-```
-
-## MIT License
-
-Created by [Bram Borggreve](https://github.com/beeman).
+Licensed under MIT
